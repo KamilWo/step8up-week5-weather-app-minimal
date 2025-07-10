@@ -7,6 +7,7 @@
   <link rel="icon" type="image/png" sizes="32x32" href="./assets/icons/favicon_32x32.png">
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./assets/css/style.css">
 </head>
@@ -17,9 +18,10 @@
     <span class="text-xl font-bold text-gray-800">Weather Dashboard</span>
   </div>
   <div class="relative">
-    <button id="avatar-menu-btn" class="flex items-center justify-center w-10 h-10 rounded-full bg-blue-500 text-white font-semibold">
-      <span>AW</span> </button>
-    <div id="api-key-submenu" class="absolute right-0 mt-2 w-64 bg-white rounded-md shadow-lg py-2 hidden">
+    <button id="avatar-menu-btn" type="button"
+            class="flex items-center justify-center w-10 h-10 rounded-full bg-blue-500 text-white font-semibold">
+      <span>AW</span></button>
+    <div id="api-key-submenu" class="absolute right-0 mt-2 w-64 bg-white rounded-md shadow-lg py-2 hidden z-10">
       <div class="px-4 py-2">
         <label for="api-key-input" class="block text-sm font-medium text-gray-700 mb-1">API Key</label>
         <input type="password" id="api-key-input" placeholder="Your API Key..."
@@ -33,16 +35,66 @@
   <h1 class="text-3xl font-bold text-center text-gray-800 hidden">OpenWeatherMap Dashboard</h1>
 
   <div class="input-section flex flex-col gap-4">
-    <label for="location-input">Location</label>
+    <label for="location-input" class="text-gray-700 font-medium">Location</label>
     <input type="text" id="location-input" placeholder="Enter city name (e.g., London, GB)">
     <button id="get-weather-btn" type="button">Get Weather</button>
   </div>
 
   <div id="loading" class="hidden loading-spinner"></div>
-  <div id="weather-result" class="weather-display hidden"></div>
   <div id="error-message" class="error-message hidden"></div>
+
+  <div id="weather-result" class="weather-display hidden flex flex-col items-center p-4">
+    <h2 id="current-weather-city" class="text-blue-700 text-2xl font-bold mb-2">&nbsp;</h2>
+    <div class="flex items-center space-x-2 mb-2">
+      <img id="current-weather-icon" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Weather Icon"
+           class="w-12 h-12">
+      <p id="current-weather-temp" class="text-4xl font-bold"></p>
+    </div>
+    <p id="current-weather-condition" class="text-lg capitalize"></p>
+    <p id="current-weather-feels" class="text-md"></p>
+    <p id="current-weather-wind" class="text-md"></p>
+  </div>
+
+  <div id="forecast-section" class="hidden mt-6">
+    <h3 class="text-2xl font-bold text-gray-800 mb-4 text-center">5-Day Forecast</h3>
+    <div id="default-carousel" class="relative w-full" data-carousel="static">
+      <div class="relative h-96 overflow-hidden rounded-lg md:h-96" id="forecast-carousel-inner">
+      </div>
+      <div class="absolute z-30 flex -translate-x-1/2 bottom-5 left-1/2 space-x-3 rtl:space-x-reverse"
+           id="carousel-indicators">
+      </div>
+      <button type="button"
+              class="absolute top-0 start-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
+              data-carousel-prev>
+        <span
+          class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 group-hover:bg-white/50 group-focus:ring-4 group-focus:ring-white focus:outline-none">
+          <svg class="w-4 h-4 text-white rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+               focusable="true" viewBox="0 0 6 10">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M5 1 1 5l4 4"/>
+          </svg>
+          <span class="sr-only">Previous</span>
+        </span>
+      </button>
+      <button type="button"
+              class="absolute top-0 end-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
+              data-carousel-next>
+        <span
+          class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 group-hover:bg-white/50 group-focus:ring-4 group-focus:ring-white focus:outline-none">
+          <svg class="w-4 h-4 text-white rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+               focusable="true" viewBox="0 0 6 10">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="m1 9 4-4-4-4"/>
+          </svg>
+          <span class="sr-only">Next</span>
+        </span>
+      </button>
+    </div>
+  </div>
+
 </div>
 
-<script src="./assets/js/script2.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
+<script src="./assets/js/script.js"></script>
 </body>
 </html>
