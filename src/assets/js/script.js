@@ -1,45 +1,63 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const apiKeyInput = document.getElementById("api-key-input");
-  // Fetch API Key from local storage if empty
-  if (apiKeyInput.value.trim() === "") {
-    apiKeyInput.value = localStorage.getItem("OpenWeatherApiKey") || "";
-  }
-  let API_KEY = apiKeyInput.value.trim() || "YOUR_API_KEY_HERE";
-
   // DOM Elements
+  const apiKeyInput = document.getElementById("api-key-input");
   const locationInput = document.getElementById("location-input");
   const getWeatherBtn = document.getElementById("get-weather-btn");
   const weatherResultDiv = document.getElementById("weather-result");
+  const currentCityElement = document.getElementById("current-weather-city");
+  const currentWeatherIcon = document.getElementById("current-weather-icon");
+  const currentWeatherTemp = document.getElementById("current-weather-temp");
+  const currentWeatherCondition = document.getElementById("current-weather-condition");
+  const currentWeatherFeels = document.getElementById("current-weather-feels");
+  const currentWeatherWind = document.getElementById("current-weather-wind");
   const errorMessageDiv = document.getElementById("error-message");
   const loadingSpinner = document.getElementById("loading");
+  const avatarMenuBtn = document.getElementById("avatar-menu-btn");
+  const apiKeySubmenu = document.getElementById("api-key-submenu");
+  const forecastSection = document.getElementById("forecast-section");
+  const forecastCarouselInner = document.getElementById("forecast-carousel-inner");
+  const carouselIndicators = document.getElementById("carousel-indicators");
+
+  // Fetch API Key from local storage on load
+  apiKeyInput.value = localStorage.getItem("OpenWeatherApiKey") || "";
+  let API_KEY = apiKeyInput.value.trim() || "YOUR_API_KEY_HERE";
+
+  // Toggle API Key submenu visibility
+  avatarMenuBtn.addEventListener("click", () => {
+    apiKeySubmenu.classList.toggle("hidden");
+  });
+
+  // Hide submenu if clicked outside
+  document.addEventListener("click", (event) => {
+    if (!avatarMenuBtn.contains(event.target) && !apiKeySubmenu.contains(event.target)) {
+      apiKeySubmenu.classList.add("hidden");
+    }
+  });
 
   // Function to display messages (error or loading)
-  function showMessage(element, message, isError = false) {
-    hideAllMessages();
+  const showMessage = (element, message, isError = false) => {
+    hideAllDisplays(); // Hide all weather/forecast sections first
     element.textContent = message;
     element.classList.remove("hidden");
     if (isError) {
       element.classList.add("error-message");
-      element.classList.remove("weather-display");
+      element.classList.remove("weather-display"); // Ensure no conflicting styles
     } else {
       element.classList.remove("error-message");
-      element.classList.remove("weather-display"); // For loading spinner, ensures no extra styles
     }
-  }
+  };
 
-  // Function to hide all display areas
-  function hideAllMessages() {
+  // Function to hide all weather and forecast display areas
+  const hideAllDisplays = () => {
     weatherResultDiv.classList.add("hidden");
     errorMessageDiv.classList.add("hidden");
     loadingSpinner.classList.add("hidden");
-  }
+    forecastSection.classList.add("hidden");
+  };
 
-  // Function to get latitude and longitude from a location name
-  async function getCoordinates(location) {
-    // Geocoding API endpoint
-    const geoApiUrl =
-      `https://api.openweathermap.org/geo/1.0/direct?q=${encodeURIComponent(location)}&limit=1&appid=${API_KEY}`;
-
+  // Function to get coordinates for a given location
+  const getCoordinates = async (location) => {
+    const geoApiUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${encodeURIComponent(location)}&limit=1&appid=${API_KEY}`;
     try {
       const response = await fetch(geoApiUrl);
       if (!response.ok) {
@@ -48,22 +66,19 @@ document.addEventListener("DOMContentLoaded", () => {
       const data = await response.json();
 
       if (data.length > 0) {
-        // Return the first found location's coordinates
-        return {lat: data[0].lat, lon: data[0].lon, name: data[0].name, country: data[0].country};
+        return { lat: data[0].lat, lon: data[0].lon, name: data[0].name, country: data[0].country };
       } else {
-        throw new Error("Location not found. Please try a different name or be more specific.");
+        throw new Error("City not found.");
       }
     } catch (error) {
       console.error("Error fetching coordinates:", error);
       throw new Error(`Could not retrieve coordinates: ${error.message}`);
     }
-  }
+  };
 
-  // Function to get current weather data using coordinates
-  async function getCurrentWeather(lat, lon, units = "metric") {
-    // Current Weather Data API endpoint
+  // Function to get current weather data
+  const getCurrentWeather = async (lat, lon, units = "metric") => {
     const weatherApiUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=${units}&appid=${API_KEY}`;
-
     try {
       const response = await fetch(weatherApiUrl);
       if (!response.ok) {
@@ -72,45 +87,175 @@ document.addEventListener("DOMContentLoaded", () => {
       const data = await response.json();
       return data;
     } catch (error) {
-      console.error("Error fetching weather data:", error);
-      throw new Error(`Could not retrieve weather data: ${error.message}`);
+      console.error("Error fetching current weather data:", error);
+      throw new Error(`Could not retrieve current weather data: ${error.message}`);
     }
-  }
+  };
 
-  // Function to display weather results
-  function displayWeather(weatherData, locationName, countryCode) {
-    hideAllMessages();
+  // Function to get 5-day / 3-hour forecast data
+  const getFiveDayForecast = async (lat, lon, units = "metric") => {
+    const forecastApiUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=${units}&appid=${API_KEY}`;
+    try {
+      const response = await fetch(forecastApiUrl);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error("Error fetching forecast data:", error);
+      throw new Error(`Could not retrieve forecast data: ${error.message}`);
+    }
+  };
+
+  // Function to display current weather
+  const displayCurrentWeather = (weatherData, locationName, countryCode) => {
     weatherResultDiv.classList.remove("hidden");
+    currentCityElement.textContent = `${locationName}, ${countryCode}`;
+    currentWeatherTemp.textContent = `${Math.round(weatherData.main.temp)}°C`;
+    currentWeatherCondition.textContent = weatherData.weather[0].description;
+    currentWeatherFeels.textContent = `Feels like: ${Math.round(weatherData.main.feels_like)}°C`;
+    currentWeatherWind.textContent = `Wind: ${Math.round(weatherData.wind.speed * 3.6)} km/h`; // Convert m/s to km/h
+    currentWeatherIcon.src = `https://openweathermap.org/img/wn/${weatherData.weather[0].icon}@2x.png`;
+    currentWeatherIcon.alt = weatherData.weather[0].description;
+  };
 
-    const temp = weatherData.main.temp;
-    const feelsLike = weatherData.main.feels_like;
-    const description = weatherData.weather[0].description;
-    const humidity = weatherData.main.humidity;
-    const windSpeed = weatherData.wind.speed; // in meters/sec by default for metric
+  // Manual carousel implementation for navigation
+  let currentSlide = 0;
+  let totalSlides = 0;
 
-    weatherResultDiv.innerHTML = `
-              <h2 class="text-blue-700">${locationName}, ${countryCode}</h2>
-              <p>Temperature: <span class="font-bold">${temp}°C</span> (feels like ${feelsLike}°C)</p>
-              <p>Condition: <span class="capitalize">${description}</span></p>
-              <p>Humidity: ${humidity}%</p>
-              <p>Wind Speed: ${windSpeed} m/s</p>
-          `;
-  }
+  const showSlide = (index) => {
+    const slides = document.querySelectorAll('[data-carousel-item]');
+    const indicators = document.querySelectorAll('#carousel-indicators button');
 
-  function displayWeather2(weatherData, locationName, countryCode) {
-    hideAllMessages();
-    weatherResultDiv.classList.remove("hidden");
+    // Hide all slides
+    slides.forEach(slide => {
+      slide.classList.add('hidden');
+      slide.classList.remove('active');
+    });
 
-    const name = weatherData.name;
-    const temp = weatherData.main.temp;
-    const description = weatherData.weather[0].description;
+    // Remove active state from all indicators
+    indicators.forEach(indicator => {
+      indicator.removeAttribute('aria-current');
+    });
 
-    weatherResultDiv.innerHTML = `
-              <h2 class="text-blue-700">${name}, ${countryCode}</h2>
-              <p>Temperature: <span class="font-bold">${temp}°C</span></p>
-              <p>Condition: <span class="capitalize">${description}</span></p>
-          `;
-  }
+    // Show current slide
+    if (slides[index]) {
+      slides[index].classList.remove('hidden');
+      slides[index].classList.add('active');
+    }
+
+    // Update current indicator
+    if (indicators[index]) {
+      indicators[index].setAttribute('aria-current', 'true');
+    }
+  };
+
+  const nextSlide = () => {
+    currentSlide = (currentSlide + 1) % totalSlides;
+    showSlide(currentSlide);
+  };
+
+  const prevSlide = () => {
+    currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+    showSlide(currentSlide);
+  };
+
+  // Function to display forecast in a carousel
+  const displayForecast = (forecastData, cityName) => {
+    forecastSection.classList.remove("hidden");
+    forecastCarouselInner.innerHTML = ''; // Clear previous items
+    carouselIndicators.innerHTML = ''; // Clear previous indicators
+
+    // Group forecast data by date
+    const weatherByDate = {};
+    forecastData.list.forEach(record => {
+      const date = new Date(record.dt * 1000);
+      const formattedDate = date.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+
+      if (!weatherByDate[formattedDate]) {
+        weatherByDate[formattedDate] = [];
+      }
+      weatherByDate[formattedDate].push(record);
+    });
+
+    let itemIndex = 0;
+    totalSlides = Object.keys(weatherByDate).length;
+    currentSlide = 0;
+
+    for (const date in weatherByDate) {
+      // Create carousel item
+      const carouselItemDiv = document.createElement("div");
+      carouselItemDiv.classList.add("hidden", "duration-700", "ease-in-out");
+      carouselItemDiv.setAttribute("data-carousel-item", "");
+      if (itemIndex === 0) {
+        carouselItemDiv.classList.remove("hidden");
+        carouselItemDiv.classList.add("active");
+      }
+
+      const hourlyContainer = document.createElement("div");
+      hourlyContainer.classList.add("forecast-hourly-container", "flex", "flex-nowrap", "overflow-x-auto", "gap-4", "p-2");
+
+      // Sort hourly data by time
+      weatherByDate[date].sort((a, b) => a.dt - b.dt);
+
+      weatherByDate[date].forEach(hourlyRecord => {
+        const time = new Date(hourlyRecord.dt * 1000).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', hour12: false });
+        const iconUrl = `https://openweathermap.org/img/wn/${hourlyRecord.weather[0].icon}@2x.png`;
+
+        const hourCard = `
+          <div class="forecast-hour-card">
+            <h3>${time}</h3>
+            <img src="${iconUrl}" alt="${hourlyRecord.weather[0].description}" class="weather-icon">
+            <p class="capitalize">${hourlyRecord.weather[0].description}</p>
+            <p>Temp: ${Math.round(hourlyRecord.main.temp)}°C</p>
+            <p>Wind: ${Math.round(hourlyRecord.wind.speed * 3.6)} km/h</p>
+          </div>
+        `;
+        hourlyContainer.insertAdjacentHTML('beforeend', hourCard);
+      });
+
+      carouselItemDiv.innerHTML = `
+        <div class="text-center mb-4">
+          <h2 class="text-2xl font-bold text-gray-800">${cityName}</h2>
+          <h3 class="text-xl font-semibold text-blue-600">${date}</h3>
+        </div>
+      `;
+      carouselItemDiv.appendChild(hourlyContainer);
+      forecastCarouselInner.appendChild(carouselItemDiv);
+
+      // Create carousel indicator
+      const indicatorButton = document.createElement("button");
+      indicatorButton.type = "button";
+      indicatorButton.classList.add("w-3", "h-3", "rounded-full");
+      if (itemIndex === 0) {
+        indicatorButton.setAttribute("aria-current", "true");
+      }
+      indicatorButton.setAttribute("aria-label", `Slide ${itemIndex + 1}`);
+      indicatorButton.setAttribute("data-carousel-slide-to", itemIndex.toString());
+
+      // Add click event for indicators
+      indicatorButton.addEventListener('click', () => {
+        currentSlide = itemIndex;
+        showSlide(currentSlide);
+      });
+
+      carouselIndicators.appendChild(indicatorButton);
+      itemIndex++;
+    }
+
+    // Add event listeners for navigation buttons
+    const prevButton = document.querySelector('[data-carousel-prev]');
+    const nextButton = document.querySelector('[data-carousel-next]');
+
+    // Remove existing event listeners
+    prevButton.replaceWith(prevButton.cloneNode(true));
+    nextButton.replaceWith(nextButton.cloneNode(true));
+
+    // Add new event listeners
+    document.querySelector('[data-carousel-prev]').addEventListener('click', prevSlide);
+    document.querySelector('[data-carousel-next]').addEventListener('click', nextSlide);
+  };
 
   // Event listener for the "Get Weather" button
   getWeatherBtn.addEventListener("click", async () => {
@@ -120,19 +265,32 @@ document.addEventListener("DOMContentLoaded", () => {
       showMessage(errorMessageDiv, "Please enter a location.", true);
       return;
     }
+    if (!API_KEY || API_KEY === "YOUR_API_KEY_HERE") {
+      showMessage(errorMessageDiv, "Please enter a valid OpenWeatherMap API Key in the menu.", true);
+      return;
+    }
 
     // Show loading spinner
-    showMessage(loadingSpinner, "", false); // Clear message, just show spinner
+    showMessage(loadingSpinner, "", false);
 
     try {
       // Step 1: Get coordinates
       const coords = await getCoordinates(location);
 
-      // Step 2: Get current weather using the coordinates
-      const weatherData = await getCurrentWeather(coords.lat, coords.lon);
+      // Step 2: Get current weather
+      const currentWeatherData = await getCurrentWeather(coords.lat, coords.lon);
 
-      // Step 3: Display the weather data
-      displayWeather2(weatherData, coords.name, coords.country);
+      // Step 3: Get 5-day forecast
+      const forecastData = await getFiveDayForecast(coords.lat, coords.lon);
+
+      // Hide loading spinner and error messages
+      hideAllDisplays();
+
+      // Step 4: Display current weather data
+      displayCurrentWeather(currentWeatherData, coords.name, coords.country);
+
+      // Step 5: Display forecast data in carousel
+      displayForecast(forecastData, coords.name);
 
     } catch (error) {
       showMessage(errorMessageDiv,
@@ -142,7 +300,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   apiKeyInput.addEventListener("input", () => {
     localStorage.setItem("OpenWeatherApiKey", apiKeyInput.value.trim());
-    API_KEY = apiKeyInput.value.trim() || "YOUR_API_KEY_HERE";
+    API_KEY = apiKeyInput.value.trim(); // Update API_KEY directly
   });
 
   // Optional: Allow pressing Enter in the input field to trigger search

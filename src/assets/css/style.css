@@ -176,8 +176,26 @@ button:active {
   flex-wrap: nowrap;
   overflow-x: auto;
   gap: var(--spacing-md);
-  padding: var(--spacing-xs) 0;
   scroll-snap-type: x mandatory;
+  padding: var(--spacing-lg);
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-blue-300) var(--color-gray-200);
+  margin: 0;
+  width: 100%;
+}
+
+.forecast-hourly-container::-webkit-scrollbar {
+  height: 8px;
+}
+
+.forecast-hourly-container::-webkit-scrollbar-track {
+  background: var(--color-gray-200);
+  border-radius: 4px;
+}
+
+.forecast-hourly-container::-webkit-scrollbar-thumb {
+  background-color: var(--color-blue-300);
+  border-radius: 4px;
 }
 
 .forecast-hour-card {
@@ -191,23 +209,82 @@ button:active {
   text-align: center;
   box-shadow: var(--shadow-sm);
   scroll-snap-align: start;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.forecast-hour-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
 }
 
 .forecast-hour-card h3 {
   font-size: var(--font-size-base);
   font-weight: 600;
   margin-bottom: var(--spacing-xs);
-  color: var(--color-gray-700);
+  color: var(--color-dark-blue-700);
 }
 
-.forecast-hour-card .weather-icon {
+.forecast-hour-card .weather-icon,
+.forecast-hour-card img {
   width: 50px;
   height: 50px;
-  margin: 0 auto var(--spacing-xs);
+  margin: var(--spacing-xs) auto;
 }
 
 .forecast-hour-card p {
   font-size: var(--font-size-sm);
   line-height: 1.3;
-  color: var(--color-gray-500);
+  color: var(--color-gray-700);
+  margin: var(--spacing-xs) 0;
+}
+
+/* Carousel container styling */
+#default-carousel {
+  background-color: var(--color-white);
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-sm);
+  margin-top: var(--spacing-md);
+  padding: 0 3rem;
+}
+
+/* Carousel navigation buttons */
+[data-carousel-prev],
+[data-carousel-next] {
+  background-color: var(--color-blue-500);
+  opacity: 0.9;
+  transition: opacity 0.3s ease;
+  width: 3rem;
+  margin: 0 -3rem;
+}
+
+[data-carousel-prev] {
+  left: 0;
+}
+
+[data-carousel-next] {
+  right: 0;
+}
+
+[data-carousel-prev]:hover,
+[data-carousel-next]:hover {
+  opacity: 1;
+}
+
+/* Carousel indicators */
+#carousel-indicators button {
+  background-color: var(--color-gray-300);
+  transition: background-color 0.3s ease;
+}
+
+#carousel-indicators button[aria-current="true"] {
+  background-color: var(--color-blue-500);
+}
+
+/* Ensure the button content is properly centered */
+[data-carousel-prev] span, [data-carousel-next] span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
 }
