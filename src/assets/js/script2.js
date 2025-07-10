@@ -13,8 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const errorMessageDiv = document.getElementById("error-message");
   const loadingSpinner = document.getElementById("loading");
 
-  // Function to display messages (error or loading)
-  function showMessage(element, message, isError = false) {
+  showMessage = (element, message, isError = false) => {
     hideAllMessages();
     element.textContent = message;
     element.classList.remove("hidden");
@@ -23,19 +22,19 @@ document.addEventListener("DOMContentLoaded", () => {
       element.classList.remove("weather-display");
     } else {
       element.classList.remove("error-message");
-      element.classList.remove("weather-display"); // For loading spinner, ensures no extra styles
+      // For loading spinner, ensures no extra styles
+      element.classList.remove("weather-display");
     }
   }
 
-  // Function to hide all display areas
-  function hideAllMessages() {
+  //Function to hid all display areas
+  hideAllMessages = () => {
     weatherResultDiv.classList.add("hidden");
     errorMessageDiv.classList.add("hidden");
     loadingSpinner.classList.add("hidden");
   }
 
-  // Function to get latitude and longitude from a location name
-  async function getCoordinates(location) {
+  getCoordinates = async (location) => {
     // Geocoding API endpoint
     const geoApiUrl =
       `https://api.openweathermap.org/geo/1.0/direct?q=${encodeURIComponent(location)}&limit=1&appid=${API_KEY}`;
@@ -50,8 +49,6 @@ document.addEventListener("DOMContentLoaded", () => {
       if (data.length > 0) {
         // Return the first found location's coordinates
         return {lat: data[0].lat, lon: data[0].lon, name: data[0].name, country: data[0].country};
-      } else {
-        throw new Error("Location not found. Please try a different name or be more specific.");
       }
     } catch (error) {
       console.error("Error fetching coordinates:", error);
@@ -60,9 +57,10 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // Function to get current weather data using coordinates
-  async function getCurrentWeather(lat, lon, units = "metric") {
+  getCurrentWeather = async (lat, lon, units = "metric") => {
     // Current Weather Data API endpoint
-    const weatherApiUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=${units}&appid=${API_KEY}`;
+    const weatherApiUrl =
+      `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=${units}&appid=${API_KEY}`;
 
     try {
       const response = await fetch(weatherApiUrl);
@@ -77,27 +75,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Function to display weather results
-  function displayWeather(weatherData, locationName, countryCode) {
-    hideAllMessages();
-    weatherResultDiv.classList.remove("hidden");
-
-    const temp = weatherData.main.temp;
-    const feelsLike = weatherData.main.feels_like;
-    const description = weatherData.weather[0].description;
-    const humidity = weatherData.main.humidity;
-    const windSpeed = weatherData.wind.speed; // in meters/sec by default for metric
-
-    weatherResultDiv.innerHTML = `
-              <h2 class="text-blue-700">${locationName}, ${countryCode}</h2>
-              <p>Temperature: <span class="font-bold">${temp}°C</span> (feels like ${feelsLike}°C)</p>
-              <p>Condition: <span class="capitalize">${description}</span></p>
-              <p>Humidity: ${humidity}%</p>
-              <p>Wind Speed: ${windSpeed} m/s</p>
-          `;
-  }
-
-  function displayWeather2(weatherData, locationName, countryCode) {
+  displayWeather = (weatherData, locationName, countryCode) => {
     hideAllMessages();
     weatherResultDiv.classList.remove("hidden");
 
@@ -132,7 +110,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const weatherData = await getCurrentWeather(coords.lat, coords.lon);
 
       // Step 3: Display the weather data
-      displayWeather2(weatherData, coords.name, coords.country);
+      displayWeather(weatherData, coords.name, coords.country);
 
     } catch (error) {
       showMessage(errorMessageDiv,
