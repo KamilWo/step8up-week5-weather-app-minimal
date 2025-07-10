@@ -2,11 +2,18 @@ body {
   font-family: Inter, sans-serif;
   background-color: #f0f4f8;
   display: flex;
-  justify-content: center;
-  align-items: flex-start;
+  flex-direction: column;
+  align-items: center;
   min-height: 100vh;
-  padding: 2rem 1rem;
+  padding-bottom: 2rem;
   box-sizing: border-box;
+}
+
+.top-menu {
+  width: 100%;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
 
 .container {
@@ -19,6 +26,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+  margin-top: 2rem;
 }
 
 input[type="text"],
