@@ -11,13 +11,26 @@
   <link rel="stylesheet" href="./assets/css/style.css">
 </head>
 <body class="antialiased">
-<div class="container">
-  <h1 class="text-3xl font-bold text-center text-gray-800">OpenWeatherMap Dashboard</h1>
-
-  <div class="input-section flex flex-col gap-4">
-    <label for="api-key-input">API Key</label>
-    <input type="password" id="api-key-input" placeholder="Your API Key...">
+<header class="top-menu flex justify-between items-center py-4 px-6 bg-white shadow-md">
+  <div class="flex items-center">
+    <img src="./assets/icons/favicon_32x32.png" alt="Weather App Logo" class="h-8 w-8 mr-2">
+    <span class="text-xl font-bold text-gray-800">Weather Dashboard</span>
   </div>
+  <div class="relative">
+    <button id="avatar-menu-btn" class="flex items-center justify-center w-10 h-10 rounded-full bg-blue-500 text-white font-semibold">
+      <span>AW</span> </button>
+    <div id="api-key-submenu" class="absolute right-0 mt-2 w-64 bg-white rounded-md shadow-lg py-2 hidden">
+      <div class="px-4 py-2">
+        <label for="api-key-input" class="block text-sm font-medium text-gray-700 mb-1">API Key</label>
+        <input type="password" id="api-key-input" placeholder="Your API Key..."
+               class="block w-full border border-gray-300 rounded-md shadow-sm p-2 text-sm focus:ring-blue-500 focus:border-blue-500">
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+  <h1 class="text-3xl font-bold text-center text-gray-800 hidden">OpenWeatherMap Dashboard</h1>
 
   <div class="input-section flex flex-col gap-4">
     <label for="location-input">Location</label>

@@ -1,17 +1,29 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const apiKeyInput = document.getElementById("api-key-input");
-  // Fetch API Key from local storage if empty
-  if (apiKeyInput.value.trim() === "") {
-    apiKeyInput.value = localStorage.getItem("OpenWeatherApiKey") || "";
-  }
-  let API_KEY = apiKeyInput.value.trim() || "YOUR_API_KEY_HERE";
-
   // DOM Elements
+  const apiKeyInput = document.getElementById("api-key-input");
   const locationInput = document.getElementById("location-input");
   const getWeatherBtn = document.getElementById("get-weather-btn");
   const weatherResultDiv = document.getElementById("weather-result");
   const errorMessageDiv = document.getElementById("error-message");
   const loadingSpinner = document.getElementById("loading");
+  const avatarMenuBtn = document.getElementById("avatar-menu-btn");
+  const apiKeySubmenu = document.getElementById("api-key-submenu");
+
+  // Fetch API Key from local storage on load
+  apiKeyInput.value = localStorage.getItem("OpenWeatherApiKey") || "";
+  let API_KEY = apiKeyInput.value.trim() || "YOUR_API_KEY_HERE";
+
+  // Toggle API Key submenu visibility
+  avatarMenuBtn.addEventListener("click", () => {
+    apiKeySubmenu.classList.toggle("hidden");
+  });
+
+  // Hide submenu if clicked outside
+  document.addEventListener("click", (event) => {
+    if (!avatarMenuBtn.contains(event.target) && !apiKeySubmenu.contains(event.target)) {
+      apiKeySubmenu.classList.add("hidden");
+    }
+  });
 
   showMessage = (element, message, isError = false) => {
     hideAllMessages();
@@ -98,6 +110,10 @@ document.addEventListener("DOMContentLoaded", () => {
       showMessage(errorMessageDiv, "Please enter a location.", true);
       return;
     }
+    if (!API_KEY || API_KEY === "YOUR_API_KEY_HERE") {
+      showMessage(errorMessageDiv, "Please enter a valid OpenWeatherMap API Key in the menu.", true);
+      return;
+    }
 
     // Show loading spinner
     showMessage(loadingSpinner, "", false); // Clear message, just show spinner
@@ -120,7 +136,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   apiKeyInput.addEventListener("input", () => {
     localStorage.setItem("OpenWeatherApiKey", apiKeyInput.value.trim());
-    API_KEY = apiKeyInput.value.trim() || "YOUR_API_KEY_HERE";
+    API_KEY = apiKeyInput.value.trim();
   });
 
   // Optional: Allow pressing Enter in the input field to trigger search
