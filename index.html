@@ -1,23 +1,69 @@
-<!DOCTYPE html><html lang=en><meta charset=UTF-8><meta name=viewport content="width=device-width, initial-scale=1.0"><title>OpenWeatherMap Dashboard</title><link rel=icon type=image/png sizes=32x32 href=/step8up-week5-weather-app-minimal/favicon_32x32.b8b08889.png><script src=https://cdn.tailwindcss.com></script><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap" rel=stylesheet><link rel=stylesheet href=/step8up-week5-weather-app-minimal/step8up-week5-weather-app-minimal.1ea566ef.css><body class=antialiased>
-<div class=container>
-  <h1 class="font-bold text-3xl text-center text-gray-800">OpenWeatherMap Dashboard</h1>
-
-  <div class="flex flex-col gap-4 input-section">
-    <label for=api-key-input>API Key</label>
-    <input type=password id=api-key-input placeholder="Your API Key...">
+<!DOCTYPE html><html lang=en><meta charset=UTF-8><meta name=viewport content="width=device-width, initial-scale=1.0"><title>OpenWeatherMap Dashboard</title><link rel=icon type=image/png sizes=32x32 href=/step8up-week5-weather-app-minimal/favicon_32x32.b8b08889.png><script src=https://cdn.tailwindcss.com></script><link href=https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css rel=stylesheet><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap" rel=stylesheet><link rel=stylesheet href=/step8up-week5-weather-app-minimal/step8up-week5-weather-app-minimal.ef14b9ee.css><body class=antialiased>
+<header class="bg-white flex items-center justify-between px-6 py-4 shadow-md top-menu">
+  <div class="flex items-center">
+    <img src=/step8up-week5-weather-app-minimal/favicon_32x32.b8b08889.png alt="Weather App Logo" class="h-8 mr-2 w-8">
+    <span class="font-bold text-gray-800 text-xl">Weather Dashboard</span>
   </div>
+  <div class=relative>
+    <button id=avatar-menu-btn type=button class="bg-blue-500 flex font-semibold h-10 items-center justify-center rounded-full text-white w-10">
+      <span>AW</span></button>
+    <div id=api-key-submenu class="absolute bg-white hidden mt-2 py-2 right-0 rounded-md shadow-lg w-64 z-10">
+      <div class="px-4 py-2">
+        <label for=api-key-input class="block font-medium mb-1 text-gray-700 text-sm">API Key</label>
+        <input type=password id=api-key-input placeholder="Your API Key..." class="block border border-gray-300 focus:border-blue-500 focus:ring-blue-500 p-2 rounded-md shadow-sm text-sm w-full">
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class=container>
+  <h1 class="font-bold hidden text-3xl text-center text-gray-800">OpenWeatherMap Dashboard</h1>
 
   <div class="flex flex-col gap-4 input-section">
-    <label for=location-input>Location</label>
+    <label for=location-input class="font-medium text-gray-700">Location</label>
     <input id=location-input placeholder="Enter city name (e.g., London, GB)">
     <button id=get-weather-btn type=button>Get Weather</button>
   </div>
 
   <div id=loading class="hidden loading-spinner"></div>
-  <div id=weather-result class="hidden weather-display"></div>
   <div id=error-message class="error-message hidden"></div>
+
+  <div id=weather-result class="flex flex-col hidden items-center p-4 weather-display">
+    <h2 id=current-weather-city class="font-bold mb-2 text-2xl text-blue-700">&nbsp;</h2>
+    <div class="flex items-center mb-2 space-x-2">
+      <img id=current-weather-icon src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Weather Icon" class="h-12 w-12">
+      <p id=current-weather-temp class="font-bold text-4xl"></p>
+    </div>
+    <p id=current-weather-condition class="capitalize text-lg"></p>
+    <p id=current-weather-feels class=text-md></p>
+    <p id=current-weather-wind class=text-md></p>
+  </div>
+
+  <div id=forecast-section class="hidden mt-6">
+    <h3 class="font-bold mb-4 text-2xl text-center text-gray-800">5-Day Forecast</h3>
+    <div id=default-carousel class="relative w-full" data-carousel=static>
+      <div class="h-96 md:h-96 overflow-hidden relative rounded-lg" id=forecast-carousel-inner>
+      </div>
+      <div class="-translate-x-1/2 absolute bottom-5 flex left-1/2 rtl:space-x-reverse space-x-3 z-30" id=carousel-indicators>
+      </div>
+      <button type=button class="absolute cursor-pointer flex focus:outline-none group h-full items-center justify-center px-4 start-0 top-0 z-30" data-carousel-prev>
+        <span class="bg-white/30 focus:outline-none group-focus:ring-4 group-focus:ring-white group-hover:bg-white/50 h-10 inline-flex items-center justify-center rounded-full w-10">
+          <svg xmlns:xmlns=http://www.w3.org/2000/svg aria-hidden=true class="h-4 rtl:rotate-180 text-white w-4" viewBox="0 0 6 10"><path stroke=currentColor stroke-linecap=round stroke-linejoin=round stroke-width=2 d="M5 1 1 5l4 4"/></svg>
+          
+        </span>
+      </button>
+      <button type=button class="absolute cursor-pointer end-0 flex focus:outline-none group h-full items-center justify-center px-4 top-0 z-30" data-carousel-next>
+        <span class="bg-white/30 focus:outline-none group-focus:ring-4 group-focus:ring-white group-hover:bg-white/50 h-10 inline-flex items-center justify-center rounded-full w-10">
+          <svg xmlns:xmlns=http://www.w3.org/2000/svg aria-hidden=true class="h-4 rtl:rotate-180 text-white w-4" viewBox="0 0 6 10"><path stroke=currentColor stroke-linecap=round stroke-linejoin=round stroke-width=2 d="m1 9 4-4-4-4"/></svg>
+          
+        </span>
+      </button>
+    </div>
+  </div>
+
 </div>
 
-<script src=/step8up-week5-weather-app-minimal/step8up-week5-weather-app-minimal.64b623bf.js></script>
+<script src=https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js></script>
+<script src=/step8up-week5-weather-app-minimal/step8up-week5-weather-app-minimal.5cb2fe59.js></script>
 
 
