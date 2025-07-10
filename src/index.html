@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OpenWeatherMap Dashboard</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="./assets/icons/favicon_32x32.png">
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./assets/css/style.css">
+</head>
+<body class="antialiased">
+<div class="container">
+  <h1 class="text-3xl font-bold text-center text-gray-800">OpenWeatherMap Dashboard</h1>
+
+  <div class="input-section flex flex-col gap-4">
+    <label for="api-key-input">API Key</label>
+    <input type="password" id="api-key-input" placeholder="Your API Key...">
+  </div>
+
+  <div class="input-section flex flex-col gap-4">
+    <label for="location-input">Location</label>
+    <input type="text" id="location-input" placeholder="Enter city name (e.g., London, GB)">
+    <button id="get-weather-btn" type="button">Get Weather</button>
+  </div>
+
+  <div id="loading" class="hidden loading-spinner"></div>
+  <div id="weather-result" class="weather-display hidden"></div>
+  <div id="error-message" class="error-message hidden"></div>
+</div>
+
+<script src="./assets/js/script2.js"></script>
+</body>
+</html>
