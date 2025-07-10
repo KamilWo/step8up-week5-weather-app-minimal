@@ -1,0 +1,23 @@
+<!DOCTYPE html><html lang=en><meta charset=UTF-8><meta name=viewport content="width=device-width, initial-scale=1.0"><title>OpenWeatherMap Dashboard</title><link rel=icon type=image/png sizes=32x32 href=/step8up-week5-weather-app-minimal/favicon_32x32.b8b08889.png><script src=https://cdn.tailwindcss.com></script><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap" rel=stylesheet><link rel=stylesheet href=/step8up-week5-weather-app-minimal/step8up-week5-weather-app-minimal.1ea566ef.css><body class=antialiased>
+<div class=container>
+  <h1 class="font-bold text-3xl text-center text-gray-800">OpenWeatherMap Dashboard</h1>
+
+  <div class="flex flex-col gap-4 input-section">
+    <label for=api-key-input>API Key</label>
+    <input type=password id=api-key-input placeholder="Your API Key...">
+  </div>
+
+  <div class="flex flex-col gap-4 input-section">
+    <label for=location-input>Location</label>
+    <input id=location-input placeholder="Enter city name (e.g., London, GB)">
+    <button id=get-weather-btn type=button>Get Weather</button>
+  </div>
+
+  <div id=loading class="hidden loading-spinner"></div>
+  <div id=weather-result class="hidden weather-display"></div>
+  <div id=error-message class="error-message hidden"></div>
+</div>
+
+<script src=/step8up-week5-weather-app-minimal/step8up-week5-weather-app-minimal.64b623bf.js></script>
+
+
