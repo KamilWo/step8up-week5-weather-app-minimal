@@ -1,35 +1,35 @@
 document.addEventListener("DOMContentLoaded", () => {
   // DOM Elements
   const apiKeyInput = document.getElementById("api-key-input");
-  const locationInput = document.getElementById("location-input");
-  const getWeatherBtn = document.getElementById("get-weather-btn");
-  const weatherResultDiv = document.getElementById("weather-result");
+  const apiKeySubmenu = document.getElementById("api-key-submenu");
+  const userMenuBtn = document.getElementById("user-menu-btn");
+  const carouselIndicators = document.getElementById("carousel-indicators");
   const currentCityElement = document.getElementById("current-weather-city");
-  const currentWeatherIcon = document.getElementById("current-weather-icon");
-  const currentWeatherTemp = document.getElementById("current-weather-temp");
   const currentWeatherCondition = document.getElementById("current-weather-condition");
   const currentWeatherFeels = document.getElementById("current-weather-feels");
+  const currentWeatherIcon = document.getElementById("current-weather-icon");
+  const currentWeatherTemp = document.getElementById("current-weather-temp");
   const currentWeatherWind = document.getElementById("current-weather-wind");
   const errorMessageDiv = document.getElementById("error-message");
-  const loadingSpinner = document.getElementById("loading");
-  const avatarMenuBtn = document.getElementById("avatar-menu-btn");
-  const apiKeySubmenu = document.getElementById("api-key-submenu");
-  const forecastSection = document.getElementById("forecast-section");
   const forecastCarouselInner = document.getElementById("forecast-carousel-inner");
-  const carouselIndicators = document.getElementById("carousel-indicators");
+  const forecastSection = document.getElementById("forecast-section");
+  const getWeatherBtn = document.getElementById("get-weather-btn");
+  const loadingSpinner = document.getElementById("loading");
+  const locationInput = document.getElementById("location-input");
+  const weatherResultDiv = document.getElementById("weather-result");
 
   // Fetch API Key from local storage on load
   apiKeyInput.value = localStorage.getItem("OpenWeatherApiKey") || "";
   let API_KEY = apiKeyInput.value.trim() || "YOUR_API_KEY_HERE";
 
-  // Toggle API Key submenu visibility
-  avatarMenuBtn.addEventListener("click", () => {
+  // Toggle User submenu visibility to set API Key
+  userMenuBtn.addEventListener("click", () => {
     apiKeySubmenu.classList.toggle("hidden");
   });
 
   // Hide submenu if clicked outside
   document.addEventListener("click", (event) => {
-    if (!avatarMenuBtn.contains(event.target) && !apiKeySubmenu.contains(event.target)) {
+    if (!userMenuBtn.contains(event.target) && !apiKeySubmenu.contains(event.target)) {
       apiKeySubmenu.classList.add("hidden");
     }
   });
@@ -120,47 +120,6 @@ document.addEventListener("DOMContentLoaded", () => {
     currentWeatherIcon.alt = weatherData.weather[0].description;
   };
 
-  // Manual carousel implementation for navigation
-  let currentSlide = 0;
-  let totalSlides = 0;
-
-  const showSlide = (index) => {
-    const slides = document.querySelectorAll('[data-carousel-item]');
-    const indicators = document.querySelectorAll('#carousel-indicators button');
-
-    // Hide all slides
-    slides.forEach(slide => {
-      slide.classList.add('hidden');
-      slide.classList.remove('active');
-    });
-
-    // Remove active state from all indicators
-    indicators.forEach(indicator => {
-      indicator.removeAttribute('aria-current');
-    });
-
-    // Show current slide
-    if (slides[index]) {
-      slides[index].classList.remove('hidden');
-      slides[index].classList.add('active');
-    }
-
-    // Update current indicator
-    if (indicators[index]) {
-      indicators[index].setAttribute('aria-current', 'true');
-    }
-  };
-
-  const nextSlide = () => {
-    currentSlide = (currentSlide + 1) % totalSlides;
-    showSlide(currentSlide);
-  };
-
-  const prevSlide = () => {
-    currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
-    showSlide(currentSlide);
-  };
-
   // Function to display forecast in a carousel
   const displayForecast = (forecastData, cityName) => {
     forecastSection.classList.remove("hidden");
@@ -180,9 +139,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     let itemIndex = 0;
-    totalSlides = Object.keys(weatherByDate).length;
-    currentSlide = 0;
-
     for (const date in weatherByDate) {
       // Create carousel item
       const carouselItemDiv = document.createElement("div");
@@ -190,11 +146,10 @@ document.addEventListener("DOMContentLoaded", () => {
       carouselItemDiv.setAttribute("data-carousel-item", "");
       if (itemIndex === 0) {
         carouselItemDiv.classList.remove("hidden");
-        carouselItemDiv.classList.add("active");
       }
 
       const hourlyContainer = document.createElement("div");
-      hourlyContainer.classList.add("forecast-hourly-container", "flex", "flex-nowrap", "overflow-x-auto", "gap-4", "p-2");
+      hourlyContainer.classList.add("forecast-hourly-container", "flex", "flex-nowrap", "overflow-x-auto", "justify-center", "gap-4", "p-2");
 
       // Sort hourly data by time
       weatherByDate[date].sort((a, b) => a.dt - b.dt);
@@ -232,29 +187,18 @@ document.addEventListener("DOMContentLoaded", () => {
         indicatorButton.setAttribute("aria-current", "true");
       }
       indicatorButton.setAttribute("aria-label", `Slide ${itemIndex + 1}`);
-      indicatorButton.setAttribute("data-carousel-slide-to", itemIndex.toString());
-
-      // Add click event for indicators
-      indicatorButton.addEventListener('click', () => {
-        currentSlide = itemIndex;
-        showSlide(currentSlide);
-      });
+      indicatorButton.setAttribute("data-carousel-slide-to", itemIndex.toString()); // Important for Flowbite
 
       carouselIndicators.appendChild(indicatorButton);
       itemIndex++;
     }
 
-    // Add event listeners for navigation buttons
-    const prevButton = document.querySelector('[data-carousel-prev]');
-    const nextButton = document.querySelector('[data-carousel-next]');
+    if (typeof initFlowbite === 'function') {
+      initFlowbite(); // Re-initialize all Flowbite components
+    } else {
+      console.warn("initFlowbite() not found. Carousel indicators might not function correctly if Flowbite is not re-initialized.");
+    }
 
-    // Remove existing event listeners
-    prevButton.replaceWith(prevButton.cloneNode(true));
-    nextButton.replaceWith(nextButton.cloneNode(true));
-
-    // Add new event listeners
-    document.querySelector('[data-carousel-prev]').addEventListener('click', prevSlide);
-    document.querySelector('[data-carousel-next]').addEventListener('click', nextSlide);
   };
 
   // Event listener for the "Get Weather" button
@@ -262,11 +206,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const location = locationInput.value.trim();
 
     if (!location) {
-      showMessage(errorMessageDiv, "Please enter a location.", true);
+      showMessage(errorMessageDiv, "Please enter chosen location.", true);
       return;
     }
     if (!API_KEY || API_KEY === "YOUR_API_KEY_HERE") {
-      showMessage(errorMessageDiv, "Please enter a valid OpenWeatherMap API Key in the menu.", true);
+      showMessage(errorMessageDiv, "Please enter a valid OpenWeatherMap API Key in the top user menu.", true);
       return;
     }
 
