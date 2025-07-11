@@ -108,9 +108,11 @@ button {
 
 #get-weather-btn {
   height: var(--spacing-3xl);
+  background-color: var(--color-blue-400);
 }
 
-button:hover {
+button:hover,
+#get-weather-btn:hover {
   background-color: var(--color-blue-600);
   transform: translateY(-2px);
 }
