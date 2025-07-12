@@ -1,20 +1,22 @@
 :root {
   /* Colors */
-  --color-white: #fff;
-  --color-light-blue-100: #e0f2fe;
-  --color-light-blue-200: #f0f4f8;
-  --color-blue-300: #60a5fa;
-  --color-blue-500: #3b82f6;
-  --color-blue-600: #2563eb;
-  --color-dark-blue-700: #1e3a8a;
-  --color-dark-blue-800: #1d4ed8;
-  --color-gray-100: #f8fafc;
-  --color-gray-200: #e2e8f0;
-  --color-gray-300: #cbd5e1;
+  --color-white: #FFF;
+  --color-light-blue-100: #E0F2FE;
+  --color-light-blue-200: #F0F4F8;
+  --color-light-blue-250: #ADD8E6;
+  --color-blue-300: #60A5FA;
+  --color-blue-400: #08A5E1;
+  --color-blue-500: #3B82F6;
+  --color-blue-600: #2563EB;
+  --color-dark-blue-700: #1E3A8A;
+  --color-dark-blue-800: #1D4ED8;
+  --color-gray-100: #F8FAFC;
+  --color-gray-200: #E2E8F0;
+  --color-gray-300: #CBD5E1;
   --color-gray-500: #475569;
   --color-gray-700: #334155;
-  --color-red-100: #fee2e2;
-  --color-red-500: #ef4444;
+  --color-red-100: #FEE2E2;
+  --color-red-500: #EF4444;
 
   /* Shadows */
   --shadow-sm: 0 2px 8px #0000000C;
@@ -47,11 +49,12 @@
 
 body {
   align-items: center;
-  background-color: var(--color-light-blue-200);
+  background: linear-gradient(to bottom right, var(--color-dark-blue-700), var(--color-light-blue-200));
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  font-family: Inter, sans-serif;
+  font-family: Montserrat, sans-serif;
+  color: #333;
   margin: 0;
   min-height: 100vh;
   padding-bottom: var(--spacing-xl);
@@ -190,6 +193,65 @@ button:active {
   }
 }
 
+.weather-container {
+  max-width: 600px;
+  width: 90%;
+  padding: 20px;
+  box-sizing: border-box;
+  background-color: #FFFFFFE5;
+  border-radius: 15px;
+  box-shadow: 0 10px 20px #00000019;
+}
+
+#city-name {
+  font-size: 2.5em;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+#temperature {
+  font-size: 3.5em;
+  font-weight: 700;
+  color: #ff6347;
+  margin-bottom: 10px;
+}
+
+#description, #wind-speed, #humidity {
+  font-size: 1.2em;
+  margin-bottom: 5px;
+}
+
+#city-input {
+  width: calc(100% - 20px);
+  padding: 12px 15px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1em;
+  margin-bottom: 15px;
+  box-sizing: border-box;
+}
+
+#city-input:focus {
+  outline: none;
+  border-color: var(--color-blue-600);
+  box-shadow: 0 0 5px #007BFF33;
+}
+
+#search-btn {
+  background-color: var(--color-blue-600);
+  color: white;
+  padding: 12px 25px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1em;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#search-btn:hover {
+  background-color: var(--color-dark-blue-700);
+}
+
 /* Forecast specific styles */
 .forecast-hourly-container {
   display: flex;
@@ -307,4 +369,19 @@ button:active {
   justify-content: center;
   width: 100%;
   height: 100%;
+}
+
+@media (width <= 768px) {
+  .weather-container {
+    width: 95%;
+    padding: 15px;
+  }
+
+  #city-name {
+    font-size: 2em;
+  }
+
+  #temperature {
+    font-size: 3em;
+  }
 }
