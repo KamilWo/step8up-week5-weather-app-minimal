@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang=en><meta charset=UTF-8><meta name=viewport content="width=device-width, initial-scale=1.0"><title>OpenWeatherMap Dashboard</title><link rel=icon type=image/png sizes=32x32 href=/step8up-week5-weather-app-minimal/favicon_32x32.b8b08889.png><script src=https://cdn.tailwindcss.com></script><link href=https://cdnjs.cloudflare.com/ajax/libs/flowbite/3.1.2/flowbite.min.css rel=stylesheet><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap" rel=stylesheet><link rel=stylesheet href=/step8up-week5-weather-app-minimal/step8up-week5-weather-app-minimal.dc81fe5a.css><body class=antialiased>
+<!DOCTYPE html><html lang=en><meta charset=UTF-8><meta name=viewport content="width=device-width, initial-scale=1.0"><title>OpenWeatherMap Dashboard</title><link rel=icon type=image/png sizes=32x32 href=/step8up-week5-weather-app-minimal/favicon_32x32.b8b08889.png><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin=anonymous referrerpolicy=no-referrer><script src=https://cdn.tailwindcss.com></script><link href=https://cdnjs.cloudflare.com/ajax/libs/flowbite/3.1.2/flowbite.min.css rel=stylesheet><link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&amp;display=swap" rel=stylesheet><link rel=stylesheet href=/step8up-week5-weather-app-minimal/step8up-week5-weather-app-minimal.12e861a0.css><body class=antialiased>
 <header class="bg-white flex items-center justify-between px-6 py-4 shadow-md top-menu">
   <div class="flex items-center">
     <img src=/step8up-week5-weather-app-minimal/favicon_32x32.b8b08889.png alt="Weather App Logo" class="h-8 mr-2 w-8">
@@ -17,19 +17,24 @@
 </header>
 
 <main class=container>
-  <h1 class="font-bold hidden text-3xl text-center text-gray-800">OpenWeatherMap Dashboard</h1>
+  <section>
+    <h1 class="font-bold text-3xl text-center text-gray-800">OpenWeatherMap Dashboard</h1>
+  </section>
+  <section class=weather-container>
+    <h2 class="font-bold text-2xl text-center text-gray-800">Your location</h2>
+    <div class="flex flex-col gap-4 input-section py-4">
+      <label for=location-input class="font-medium text-gray-700">City</label>
+      <input id=location-input placeholder="Enter city name (e.g., London, GB)">
+      <button id=get-weather-btn type=button>Get Weather</button>
+    </div>
 
-  <div class="flex flex-col gap-4 input-section">
-    <label for=location-input class="font-medium text-gray-700">Location</label>
-    <input id=location-input placeholder="Enter city name (e.g., London, GB)">
-    <button id=get-weather-btn type=button>Get Weather</button>
-  </div>
+    <div id=loading class="hidden loading-spinner"></div>
+    <div id=error-message class="error-message hidden"></div>
+  </section>
 
-  <div id=loading class="hidden loading-spinner"></div>
-  <div id=error-message class="error-message hidden"></div>
-
-  <div id=weather-result class="flex flex-col hidden items-center p-4 weather-display">
-    <h2 id=current-weather-city class="font-bold mb-2 text-2xl text-blue-700">&nbsp;</h2>
+  <section id=weather-result class="flex flex-col hidden items-center p-4 weather-display">
+    <h2 class="font-bold mb-2 text-2xl text-gray-800">Current Weather</h2>
+    <h3 id=current-weather-city class="font-bold mb-2 text-2xl text-blue-700">&nbsp;</h3>
     <div class="flex items-center mb-2 space-x-2">
       <img id=current-weather-icon src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Weather Icon" class="h-12 w-12">
       <p id=current-weather-temp class="font-bold text-4xl"></p>
@@ -37,9 +42,9 @@
     <p id=current-weather-condition class="capitalize text-lg"></p>
     <p id=current-weather-feels class=text-md></p>
     <p id=current-weather-wind class=text-md></p>
-  </div>
+  </section>
 
-  <div id=forecast-section class="hidden mt-6">
+  <section id=forecast-section class="hidden mt-6">
     <h3 class="font-bold mb-4 text-2xl text-center text-gray-800">5-Day Forecast</h3>
     <div id=default-carousel class="relative w-full" data-carousel=static>
       <div class="h-96 md:h-96 overflow-hidden relative rounded-lg" id=forecast-carousel-inner>
@@ -59,15 +64,19 @@
         </span>
       </button>
     </div>
-  </div>
+  </section>
 </main>
 
 <footer class="bg-gray-800 main-footer mt-8 py-4 text-center text-white w-full">
   <p>© 2025 Weather Dashboard. All rights reserved.</p>
-  <p class=text-sm>Powered by <a href=https://openweathermap.org/ target=_blank class="hover:underline text-blue-400">OpenWeather</a></p>
+  <p class=text-sm>Powered by
+    <a href=https://openweathermap.org/ target=_blank class="hover:underline text-blue-400">OpenWeather</a>
+  </p>
 </footer>
 
+
 <script src=https://cdnjs.cloudflare.com/ajax/libs/flowbite/3.1.2/flowbite.min.js></script>
+
 <script src=/step8up-week5-weather-app-minimal/step8up-week5-weather-app-minimal.eed3c642.js></script>
 
 
