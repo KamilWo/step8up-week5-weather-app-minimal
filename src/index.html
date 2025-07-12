@@ -5,10 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>OpenWeatherMap Dashboard</title>
   <link rel="icon" type="image/png" sizes="32x32" href="./assets/icons/favicon_32x32.png">
+  <!-- Font Awesome 6 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+        integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer">
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Flowbite CSS -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/3.1.2/flowbite.min.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+  <!-- Custom CSS -->
   <link rel="stylesheet" href="./assets/css/style.css">
 </head>
 <body class="antialiased">
@@ -32,19 +39,24 @@
 </header>
 
 <main class="container">
-  <h1 class="text-3xl font-bold text-center text-gray-800 hidden">OpenWeatherMap Dashboard</h1>
+  <section>
+    <h1 class="text-3xl font-bold text-center text-gray-800">OpenWeatherMap Dashboard</h1>
+  </section>
+  <section class="weather-container">
+    <h2 class="text-2xl font-bold text-center text-gray-800">Your location</h2>
+    <div class="input-section flex flex-col gap-4 py-4">
+      <label for="location-input" class="text-gray-700 font-medium">City</label>
+      <input type="text" id="location-input" placeholder="Enter city name (e.g., London, GB)">
+      <button id="get-weather-btn" type="button">Get Weather</button>
+    </div>
 
-  <div class="input-section flex flex-col gap-4">
-    <label for="location-input" class="text-gray-700 font-medium">Location</label>
-    <input type="text" id="location-input" placeholder="Enter city name (e.g., London, GB)">
-    <button id="get-weather-btn" type="button">Get Weather</button>
-  </div>
+    <div id="loading" class="hidden loading-spinner"></div>
+    <div id="error-message" class="error-message hidden"></div>
+  </section>
 
-  <div id="loading" class="hidden loading-spinner"></div>
-  <div id="error-message" class="error-message hidden"></div>
-
-  <div id="weather-result" class="weather-display hidden flex flex-col items-center p-4">
-    <h2 id="current-weather-city" class="text-blue-700 text-2xl font-bold mb-2">&nbsp;</h2>
+  <section id="weather-result" class="weather-display hidden flex flex-col items-center p-4">
+    <h2 class="text-2xl font-bold text-gray-800 mb-2">Current Weather</h2>
+    <h3 id="current-weather-city" class="text-blue-700 text-2xl font-bold mb-2">&nbsp;</h3>
     <div class="flex items-center space-x-2 mb-2">
       <img id="current-weather-icon" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Weather Icon"
            class="w-12 h-12">
@@ -53,9 +65,9 @@
     <p id="current-weather-condition" class="text-lg capitalize"></p>
     <p id="current-weather-feels" class="text-md"></p>
     <p id="current-weather-wind" class="text-md"></p>
-  </div>
+  </section>
 
-  <div id="forecast-section" class="hidden mt-6">
+  <section id="forecast-section" class="hidden mt-6">
     <h3 class="text-2xl font-bold text-gray-800 mb-4 text-center">5-Day Forecast</h3>
     <div id="default-carousel" class="relative w-full" data-carousel="static">
       <div class="relative h-96 overflow-hidden rounded-lg md:h-96" id="forecast-carousel-inner">
@@ -90,15 +102,20 @@
         </span>
       </button>
     </div>
-  </div>
+  </section>
 </main>
 
 <footer class="main-footer bg-gray-800 text-white text-center py-4 mt-8 w-full">
   <p>&copy; 2025 Weather Dashboard. All rights reserved.</p>
-  <p class="text-sm">Powered by <a href="https://openweathermap.org/" target="_blank" class="text-blue-400 hover:underline">OpenWeather</a></p>
+  <p class="text-sm">Powered by
+    <a href="https://openweathermap.org/" target="_blank"
+       class="text-blue-400 hover:underline">OpenWeather</a>
+  </p>
 </footer>
 
+<!-- Flowbite JS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/3.1.2/flowbite.min.js"></script>
+<!-- Custom JS -->
 <script src="./assets/js/script.js"></script>
 </body>
 </html>
