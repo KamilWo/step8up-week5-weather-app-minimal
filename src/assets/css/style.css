@@ -195,7 +195,7 @@ button:active {
 }
 
 .weather-container,
-#weather-result{
+#weather-result {
   max-width: 600px;
   width: 90%;
   padding: var(--spacing-xl);
