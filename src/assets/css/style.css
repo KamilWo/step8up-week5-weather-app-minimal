@@ -46,15 +46,23 @@
 }
 
 body {
-  font-family: Inter, sans-serif;
+  align-items: center;
   background-color: var(--color-light-blue-200);
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  font-family: Inter, sans-serif;
+  margin: 0;
   min-height: 100vh;
   padding-bottom: var(--spacing-xl);
-  box-sizing: border-box;
+  position: relative;
 }
+
+main {
+  flex-grow: 1;
+  margin-bottom: 80px;
+}
+
 
 .top-menu {
   width: 100%;
@@ -76,6 +84,16 @@ body {
   margin-top: var(--spacing-xl);
 }
 
+/* Footer */
+.main-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 999;
+}
+
+/* Input controls */
 input[type="text"],
 input[type="password"] {
   border: 2px solid var(--color-gray-300);
